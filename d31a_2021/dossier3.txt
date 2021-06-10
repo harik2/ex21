@@ -1,0 +1,149 @@
+Dossier 3 : 
+
+Question 1 :
+une classe abstraite est une classe dont l'implémentation n'est pas complète car 
+elle posséde au moins une méthode abstraite (sans implémentation)
+et qui n'est pas instanciable. Elle sert de base à d'autres classes dérivées
+
+Une méthode abstraite est une méthode sans implémentation.
+
+La méthode calculerNbPoints sert à faire de polymorphisme mais on ne peut pas l'implémenter
+dans la classe Etudiant  , car on ne peut pas calculer le nombre de points à ce niveau d'abstration
+
+dans ce cas on déclare abstraite la méthode calculerNbPoints
+la classe Etudiant doit être  abstraite car elle posséde une méthode abstraite : calculerNbPoints
+
+-----------------------------
+
+
+public abstract class Etudiant  {
+protected  String nom, prénom, adresse, email,téléphone ,motDePasse;
+protected List<Activite> lesActivites;
+protected double nombrePoints;
+public Etudiant() {
+}
+public Etudiant(String nom, String prénom, String adresse, String email, String téléphone, String motDePasse,
+	double nombrePoints,List<Activite> lesActivites) {
+	this.nombrePoints=nombrePoints;
+	this.nom = nom;
+	this.prénom = prénom;
+	this.adresse = adresse;
+	this.email = email;
+	this.téléphone = téléphone;
+	this.motDePasse = motDePasse;
+	this.lesActivites = lesActivites;
+}
+public abstract void  calculerNbPoints(Activite uneActivite );
+
+}
+
+
+
+---------------------------------------------------------
+public class Initial  extends Etudiant{
+
+protected String nom,prenom,adresse,personneGarante;
+protected double montantFraisScolarite;
+protected	String echeancesPaiement;
+
+
+public void calculerNbPoints(Activite uneActivite) {	
+}
+	
+}
+
+----------------------------------------------------
+
+public class Alternant extends Etudiant {
+	protected String nom,adresse,telephone,email,typeContrat;
+	protected double duree;
+
+public void calculerNbPoints(Activite uneActivite) {
+}
+
+}
+
+
+Question 2 : 
+La méthode calculerNbPoints dans la classe Initial :
+public void calculerNbPoints(Activite uneActivite) {
+	
+	if (lesActivites.size()>2) {
+		nombrePoints=uneActivite.getNombreHeure();
+	} else {
+		nombrePoints=uneActivite.getNombreHeure()/2;
+	}
+	if(uneActivite.getNombreEtudiants()>1) {	
+		nombrePoints=nombrePoints/uneActivite.getNombreEtudiants();
+	}
+	
+	
+}
+
+La méthode calculerNbPoints dans la classe Alternant :
+public void calculerNbPoints(Activite uneActivite) {
+	
+	if (lesActivites.size()>2) {
+		nombrePoints=uneActivite.getNombreHeure()*1.05;
+	} else {
+		nombrePoints=(uneActivite.getNombreHeure()/2)*1.05;
+	}
+	
+	if(uneActivite.getNombreEtudiants()>1) {	
+	nombrePoints=nombrePoints/uneActivite.getNombreEtudiants();
+	}
+	
+}
+
+Question 3 :
+
+public void nbHeuresMoyen ( ) {
+	double somme=0,nombreMoyen ;
+	for (Activite activite : lesActivites) {
+		somme =somme+activite.getNombreHeure();
+	}
+	nombreMoyen =somme/lesActivites.size();
+	System.out.println("le nombre moyen d’heures de toutes les activités réalisées par l'étudiant  "+this.nom+" "+this.prénom+" est "+nombreMoyen);
+	
+}
+
+
+
+Question 4:
+
+<?php 
+$link= new PDO('mysql:host=localhost;dbname=db_ECD', 'user_ecd', 'ecd_paris_@$');
+$stmt=$link->prepare("select * from etudiant where email=? ");
+$stmt->execute([($_SESSION["email"]]);
+$etudiant=$stmt->fetch();
+
+
+$stmt=$link->prepare("select  * from   activite join participer  on activite.idactivite=participer.idactiviter
+ where participer.idetudiant=? ");
+$stmt->execute([$etudiant['idetudiant']]);
+$activites=$stmt->fetchAll();
+
+
+?>
+
+
+<h1>
+Liste de activités de l'étudiant <?php echo $etudiant['nom'].' '.$etudiant['prenom']?></h1>
+
+<table>
+<tr>
+    <th>Id Activité</th>
+    <th>Désignation</th>
+    <th>Nombre d'heures effetuées</th>
+    <th>Nombre d'étudiants en groupe</th>
+</tr>
+<?php foreach($activites as $activite) {?>
+    <tr>
+        <td><?php echo $activite['idactivite']; ?></td>
+        <td><?php echo $activite['designation']; ?></td>
+        <td><?php echo $activite['nombreHeure']; ?></td>
+        <td><?php echo $activite['nombreEtudiant']; ?></td>
+    </tr>
+<?php } ?>
+<h2>Votre total de points est de : ... </h2>
+</table>
