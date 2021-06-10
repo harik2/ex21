@@ -1,0 +1,8 @@
+Question 1 :
+    ['112', '222']
+Question 2 :
+
+l'objectif du programme est de lire le fichier mon_fichier.txt  ligne par ligne
+
+Question 3 : 
+a=Animal('chien')
